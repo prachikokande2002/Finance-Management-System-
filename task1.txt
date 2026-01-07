@@ -1,0 +1,252 @@
+
+
+......Build a comprehensive personal finance management system with object-oriented design, file handling, data persistence, and a user-friendly command-line interface to track expenses, generate reports, and analyze spending patterns......
+
+---------------------------------------------------------------------------
+
+personal_finance_manager/
+│
+├── expense.py
+├── file_manager.py
+├── reports.py
+├── utils.py
+├── ui.py
+└── main.py
+
+---------------------------expense.py — Expense Class (OOP)----------
+class Expense:
+    def __init__(self, amount, category, date, description):
+        self.amount = float(amount)
+        self.category = category
+        self.date = date
+        self.description = description
+
+    def to_list(self):
+        return [self.amount, self.category, self.date, self.description]
+
+    @staticmethod
+    def from_list(data):
+        return Expense(
+            amount=float(data[0]),
+            category=data[1],
+            date=data[2],
+            description=data[3]
+        )
+
+
+---------------------file_manager.py — CSV Persistence + Backup------------
+
+import csv
+import shutil
+from expense import Expense
+
+DATA_FILE = "expenses.csv"
+BACKUP_FILE = "expenses_backup.csv"
+
+def save_expense(expense):
+    with open(DATA_FILE, "a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(expense.to_list())
+
+def load_expenses():
+    expenses = []
+    try:
+        with open(DATA_FILE, "r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                expenses.append(Expense.from_list(row))
+    except FileNotFoundError:
+        pass
+    return expenses
+
+def backup_data():
+    try:
+        shutil.copy(DATA_FILE, BACKUP_FILE)
+    except FileNotFoundError:
+        print("No data file found to backup.")
+
+def restore_data():
+    try:
+        shutil.copy(BACKUP_FILE, DATA_FILE)
+    except FileNotFoundError:
+        print("No backup file found.")
+
+
+-------------------------reports.py — Reports & Analysis-------------------
+
+from collections import defaultdict
+
+def generate_report(expenses):
+    total = sum(exp.amount for exp in expenses)
+    average = total / len(expenses) if expenses else 0
+
+    category_totals = defaultdict(float)
+    for exp in expenses:
+        category_totals[exp.category] += exp.amount
+
+    return total, average, category_totals
+
+def display_report(expenses):
+    total, average, category_totals = generate_report(expenses)
+
+    print("\n📊 EXPENSE REPORT")
+    print(f"Total Expenses: ${total:.2f}")
+    print(f"Average Expense: ${average:.2f}")
+
+    print("\nCategory-wise Spending:")
+    for category, amount in category_totals.items():
+        print(f"  {category}: ${amount:.2f}")
+
+------------------------utils.py — Validation & Formatting----------------
+
+
+from datetime import datetime
+
+def validate_amount(value):
+    try:
+        value = float(value)
+        if value <= 0:
+            raise ValueError
+        return value
+    except ValueError:
+        raise ValueError("Amount must be a positive number.")
+
+def validate_date(date_str):
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+        return date_str
+    except ValueError:
+        raise ValueError("Date format must be YYYY-MM-DD.")
+
+def validate_text(text):
+    if not text.strip():
+        raise ValueError("This field cannot be empty.")
+    return text.strip()
+
+----------------------------------ui.py — Command-Line Interface---------
+
+from expense import Expense
+from file_manager import save_expense, load_expenses, backup_data, restore_data
+from reports import display_report
+from utils import validate_amount, validate_date, validate_text
+
+def show_menu():
+    print("""
+💰 PERSONAL FINANCE MANAGER
+1. Add Expense
+2. View Expense Report
+3. Backup Data
+4. Restore Data
+5. Exit
+""")
+
+def add_expense():
+    try:
+        amount = validate_amount(input("Enter amount: "))
+        category = validate_text(input("Enter category: "))
+        date = validate_date(input("Enter date (YYYY-MM-DD): "))
+        description = validate_text(input("Enter description: "))
+
+        expense = Expense(amount, category, date, description)
+        save_expense(expense)
+
+        print("✅ Expense added successfully!")
+
+    except ValueError as error:
+        print(f"❌ Error: {error}")
+
+def process_choice(choice):
+    if choice == "1":
+        add_expense()
+    elif choice == "2":
+        expenses = load_expenses()
+        display_report(expenses)
+    elif choice == "3":
+        backup_data()
+        print("📁 Backup completed.")
+    elif choice == "4":
+        restore_data()
+        print("♻️ Data restored from backup.")
+    elif choice == "5":
+        print("👋 Exiting program.")
+        return False
+    else:
+        print("❌ Invalid option. Please try again.")
+    return True
+
+---------------------------main.py — Program Entry Point-------------------
+
+from ui import show_menu, process_choice
+
+def main():
+    running = True
+    while running:
+        show_menu()
+        choice = input("Select an option: ")
+        running = process_choice(choice)
+
+if __name__ == "__main__":
+    main()
+
+
+==========================================================================
+output=
+
+💰 PERSONAL FINANCE MANAGER
+1. Add Expense
+2. View Expense Report
+3. Backup Data
+4. Restore Data
+5. Exit
+
+Select an option: 1
+Enter amount: 250
+Enter category: Transport
+Enter date (YYYY-MM-DD): 2025-09-10
+Enter description: Bus Pass
+✅ Expense added successfully!
+
+Select an option: 1
+Enter amount: 75
+Enter category: Entertainment
+Enter date (YYYY-MM-DD): 2025-09-12
+Enter description: Movie Ticket
+✅ Expense added successfully!
+
+Select an option: 1
+Enter amount: 300
+Enter category: Groceries
+Enter date (YYYY-MM-DD): 2025-09-13
+Enter description: Weekly Shopping
+✅ Expense added successfully!
+
+Select an option: 2
+
+📊 EXPENSE REPORT
+Total Expenses: $375.00
+Average Expense: $187.50
+
+Category-wise Spending:
+  Entertainment: $75.00
+  Groceries: $300.00
+
+
+Select an option: 3
+📁 Backup completed successfully.
+
+Select an option: 4
+♻️ Data restored from backup successfully.
+Select an option: 1
+Enter amount: -50
+❌ Error: Amount must be a positive number.
+
+Select an option: 1
+Enter amount: 100
+Enter category:
+❌ Error: This field cannot be empty.
+
+Select an option: 9
+❌ Invalid option. Please try again.
+
+
+

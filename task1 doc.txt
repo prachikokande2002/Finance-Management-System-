@@ -1,0 +1,144 @@
+1)Project Overview
+
+The Personal Finance Management System is a menu-driven, command-line application developed using Python to help users record, manage, and analyze their daily expenses efficiently. The system is designed using object-oriented programming (OOP) principles and provides reliable data persistence through CSV file handling.
+
+This project enables users to track expenses by category, date, and description, generate detailed financial reports, and analyze spending patterns. It also includes backup and restore functionality to ensure data safety.
+
+objective 
+*To build a user-friendly expense tracking system
+
+*To apply object-oriented design concepts in Python
+
+*To implement file handling for persistent data storage
+
+*To generate financial reports and spending analysis
+
+*To ensure data reliability through backup and restore features
+
+===========================================================================
+2)Setup Instructions
+
+     1) System Requirements
+     2) Install Python
+     3)Create Project Directory
+       3.1 create a folder name 
+       3.2 inside the folder create the following file
+         expense.py
+         file_manager.py
+         reports.py
+         utils.py
+         ui.py
+         main.py
+     4)Add project code
+     5)Run the Application
+     6)Data Storage
+     7)Troubleshooting
+
+===========================================================================
+3)Code Structure
+
+PersonalFinanceManager/
+│
+├── main.py
+├── expense.py
+├── file_manager.py
+├── reports.py
+├── utils.py
+└── ui.py
+
+
+1)main.py — Program Entry Point
+
+2)expense.py — Expense Class (OOP)
+
+3)file_manager.py — File Handling & Persistence
+
+Handles all CSV-related operations
+
+4)reports.py — Reports & Data Analysis
+
+Generates financial reports
+
+5)utils.py — Validation & Helper Functions
+
+Ensures valid and clean user input
+
+6)ui.py — User Interface (CLI)
+
+Manages all user interaction
+
+===================================================================================================================
+
+4)Visual Documentation=
+
+1)System Architecture Diagram
+2)Module Interaction Diagram
+3)Class Diagram (Expense Class)
+4)Data Flow Diagram (Adding an Expense)
+5)Report Generation Flow
+6)Backup & Restore Workflow
+7)User Interaction Flow (CLI)
+8)Validation Logic Overview
+
+
+====================================================================================================
+5) Technical Details
+
+Technology Stack
+----------------
+1)Programming Language: Python 
+
+2)Paradigm: Object-Oriented Programming (OOP)
+
+3)Storage: CSV files (using built-in csv module)
+
+4)Interface: Command-Line Interface (CLI)
+
+5)libraries use:
+
+1)csv – file handling & persistence
+
+2)datetime – date validation & formatting
+
+3)collections.defaultdict – efficient aggregations
+
+4)os – file existence & backup handling
+
+Object-Oriented Design
+----------------------
+1)Expense Class Responsibilities
+2)Data Persistence Strategy
+3)Input Validation & Error Handling
+4)Command-Line Interface Design
+5)Reporting & Analytics Logic
+6)Backup & Restore Mechanism
+7)Modularity & Separation of Concerns
+8)Performance Considerations
+
+===================================================================================================
+Testing Evidence
+1)Testing Strategy
+
+Testing Types Applied:
+
+Functional Testing
+
+Input Validation Testing
+
+Error Handling Testing
+
+File Handling Testing
+
+Backup & Restore Testing
+
+
+2)Test Environment
+3)Test Cases – Expense Entry
+4)Test Cases – File Handling
+5)Test Cases – Reports & Analytics
+6)Test Cases – Backup & Restore
+7)Negative & Edge Case Testing
+8)Sample Test Execution Output (CLI)
+9)Test Coverage Summary
+
+
